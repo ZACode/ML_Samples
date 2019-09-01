@@ -53,6 +53,8 @@ fStackGnomes:{
   .ga.gnomeToPlay:select from currGenGnomes where .ga.foodavailable < sums (food-energy);
   / The rest are marked dead because of no food available
   update isalive:0b,msg:`unfit_for_generation from `.ga.gnome where gen=.ga.currentGen,not energy>=food,not id in exec id from .ga.gnomeToPlay;
+ .ga.groupAndPlay[];
+
  };
 .log.info:.log.error:.log.warn:{0N!(.z.p;-3!x)};
 .jobs.upd:{[a;b;c;d;e]0N!(a;b;c;d;e)};
@@ -67,6 +69,10 @@ fStackGnomes:{
  };
 
 .ga.groupAndPlay:{
+  exec i,next i from .ga.gnomeToPlay
+
+  flip exec id,next id from .ga.gnome
+
   / make groups of 2 each from .ga.gnomeToPlay
   / call .ga.applyRrules for each group
   / repeat play
@@ -84,7 +90,10 @@ fStackGnomes:{
  / upsert .ga.gnome using .ga.gnomeToPlay
  };
 
-2 xgroup .ga.gnome
+(2/)#a
+a:til 10
+`id xgroup 
+`grp xcols 0!update grp:mod'[i;2] from 
 
 
 /
